@@ -1,26 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Cabecalho from './pages/Cabecalho';
+import Home from './pages/Home';
+import Promocao from './pages/Promocao';
+import Reserva from './pages/Reserva';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+    return (
+     <Router>
+       <div>
+         <Cabecalho />
+         <div id="holder">
+           <div id="body" className="container main-container">
+              <Route exact path="/" component={Home} />
+             <Route path="/promocao" component={Promocao} />
+             <Route path="/reserva" component={Reserva} />
+           </div>
+         </div>
+       </div>
+     </Router>
+   );
 }
 
 export default App;

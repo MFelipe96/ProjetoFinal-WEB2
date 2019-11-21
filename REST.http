@@ -1,0 +1,104 @@
+
+### REQUESTS TRABALHO
+
+
+
+POST http://localhost:8080/site
+Content-Type: application/json
+
+{
+    "url": "Teste.com",
+    "nome": "Testando",
+    "senha": "1234",
+    "telefone": "111111111"
+}
+
+###
+
+POST http://localhost:8080/site
+Content-Type: application/json
+
+{
+    "url": "Teste2.com",
+    "nome": "Testando outra vez",
+    "senha": "1234",
+    "telefone": "111111112"
+}
+
+###
+
+GET http://localhost:8080/site?url=Teste2.com
+
+###
+POST http://localhost:8080/hotel
+Content-Type: application/json
+
+{
+    "cnpj":"12345",
+    "nome":"Um hotel",
+    "senha":"1234",
+    "cidade":"São Carlos"
+}
+
+###
+POST http://localhost:8080/hotel
+Content-Type: application/json
+
+{
+    "cnpj":"123456",
+    "nome":"Outro hotel",
+    "senha":"1234",
+    "cidade":"Rio Claro"
+}
+
+###
+POST http://localhost:8080/hotel
+Content-Type: application/json
+
+{
+    "cnpj":"1234567",
+    "nome":"Mais um hotel",
+    "senha":"1234",
+    "cidade":"São Carlos"
+}
+
+###
+GET http://localhost:8080/hotel?cnpj=1234567
+
+###
+POST http://localhost:8080/promocao
+Content-Type: application/json
+
+{
+    "url":"Teste.com",
+    "cnpj":"12345",
+    "preco":190.90,
+    "fim":"1964-10-22T02:00:00Z[UTC]",
+    "inicio":"1964-10-22T02:00:00Z[UTC]"
+}
+
+###
+POST http://localhost:8080/promocao
+Content-Type: application/json
+
+{
+    "url":"Teste2.com",
+    "cnpj":"12345",
+    "preco":190.90,
+    "fim":"1964-10-22T02:00:00Z[UTC]",
+    "inicio":"1964-10-22T02:00:00Z[UTC]"
+}
+
+###
+POST http://localhost:8080/promocao
+Content-Type: application/json
+
+{
+    "url":"Teste2.com",
+    "cnpj":"1234567",
+    "preco":190.90,
+    "fim":"1964-10-22T02:00:00Z[UTC]",
+    "inicio":"1964-10-22T02:00:00Z[UTC]"
+}
+###
+GET http://localhost:8080/promocao/cidade?cidade=São Carlos

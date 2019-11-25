@@ -1,9 +1,11 @@
 import React from 'react';
 import Cabecalho from './pages/Cabecalho';
 import Home from './pages/Home';
-import Promocao from './pages/Promocao';
-import Reserva from './pages/Reserva';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Cadastro from './pages/Cadastro';
+import CadastroSiteForm from './pages/CadastroSiteForm';
+import Login from './pages/Login';
+import CadastroSite from './pages/CadastroSite';
 
 function App() {
 
@@ -15,8 +17,9 @@ function App() {
          <div id="holder">
            <div id="body" className="container main-container">
               <Route exact path="/" component={Home} />
-             <Route path="/promocao" component={Promocao} />
-             <Route path="/reserva" component={Reserva} />
+              <Route path="/cadastroSiteForm" component={CadastroSiteForm}/>
+             <Route path="/cadastro" component={Cadastro} />
+             <Route path="/login" component={Login} />
            </div>
          </div>
        </div>

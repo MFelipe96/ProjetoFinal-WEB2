@@ -26,10 +26,10 @@ const Header = () => (
                             <NavLink exact activeStyle={{ fontWeight: 'bold', color: 'yellowgreen' }} to='/'>Home</NavLink>
                         </li>
                         <li>
-                            <NavLink exact activeStyle={{ fontWeight: 'bold', color: 'yellowgreen' }} to='/reserva'>Reservas</NavLink>
+                            <NavLink exact activeStyle={{ fontWeight: 'bold', color: 'yellowgreen' }} to='/cadastro'>Cadastrar</NavLink>
                         </li>
                         <li>
-                            <NavLink exact activeStyle={{ fontWeight: 'bold', color: 'yellowgreen' }} to='/promocao'>Promoções</NavLink>
+                            <NavLink exact activeStyle={{ fontWeight: 'bold', color: 'yellowgreen' }} to='/login'>Login</NavLink>
                         </li>
                     </ul>
                 </div>

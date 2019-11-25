@@ -1,37 +1,36 @@
 import React from 'react';
-import CadastroSite from './CadastroSite';
+import CadastroHotel from './CadastroHotel';
 import {Link} from 'react-router-dom';
+import Cadastro from './Cadastro';
 
-
-class CadastroSiteForm extends React.Component {
+class CadastroHotelForm extends React.Component {
     constructor() {
         super();
         this.state = {
-            url: '',
+            cnpj: '',
             senha: '',
             nome: '',
-            telefone: '',
-            estado: CadastroSite.inicio(),
-            mensagem: 'Digite sua url para dar início',
+            cidade: '',
+            estado: CadastroHotel.inicio(),
+            mensagem: 'Digite sua cnpj para dar início',
             mensagemClassName: 'alert alert-info',
-            siteEncontrado: null,
+            hotelEncontrado: null,
             mostrarAjaxLoader: false,
             mensagensValidacao: {
-                url: '',
+                cnpj: '',
                 senha: '',
                 nome: '',
-                telefone: '',
+                cidade: '',
                 confirmarSenha: '',
             },
         };
     }
 
-
     render() {
         return (
             <div className="row">
                 <div className="col-lg-12 text-center">
-                    <h4>Cadastrar Site de Reservas</h4>
+                    <h4>Cadastrar Hotel</h4>
                     <form className="form-horizontal" name="formCadastro">
                         <div className={this.state.mensagemClassName}>
                             {this.state.mensagem}
@@ -40,17 +39,18 @@ class CadastroSiteForm extends React.Component {
                         <div className="form-group">
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <label className="col-sm-2 control-label" htmlFor="url">URL</label>
+                                    <label className="col-sm-2 control-label" htmlFor="cnpj">CNPJ</label>
                                     <div className="col-sm-10">
-                                        <input type="url"
+                                        <input type="text"
+                                            max="14"
                                             className="form-control"
-                                            name="url"
-                                            label="URL"
-                                            value={this.state.url}
+                                            name="cnpj"
+                                            label="CNPJ"
+                                            value={this.state.cnpj}
                                             onChange={(event) => this.handleUserInput(event)}
                                             onBlur={() => this.handleEmailChanged()}>
                                         </input>
-                                        <span className="text text-danger">{this.state.mensagensValidacao['url']}</span>
+                                        <span className="text text-danger">{this.state.mensagensValidacao['cnpj']}</span>
                                     </div>
                                 </div>
                                 <div className="col-xs-6">
@@ -73,7 +73,7 @@ class CadastroSiteForm extends React.Component {
                         <div className="form-group">
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <label className="col-sm-3 control-label" htmlFor="nome">Nome do site</label>
+                                    <label className="col-sm-3 control-label" htmlFor="nome">Nome do hotel</label>
                                     <div className="col-sm-9">
                                         <input type="text"
                                             className="form-control"
@@ -87,18 +87,17 @@ class CadastroSiteForm extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-xs-6">
-                                    <label className="col-sm-2 control-label" htmlFor="telefone">Telefone</label>
+                                    <label className="col-sm-2 control-label" htmlFor="cidade">Cidade</label>
                                     <div className="col-sm-10">
-                                        <input type="tel"
-                                            pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                                        <input type="text"
                                             className="form-control"
-                                            name="telefone"
-                                            label="Telefone"
+                                            name="cidade"
+                                            label="Cidade"
                                             disabled={this.state.estado.camposDadosPessoaisDesabilitados}
-                                            value={this.state.telefone}
+                                            value={this.state.cidade}
                                             onChange={(event) => this.handleUserInput(event)}>
                                         </input>
-                                        <span className="text text-danger">{this.state.mensagensValidacao['telefone']}</span>
+                                        <span className="text text-danger">{this.state.mensagensValidacao['cidade']}</span>
                                     </div>
                                 </div>
                             </div>
@@ -180,22 +179,23 @@ class CadastroSiteForm extends React.Component {
     mostrarAjaxLoader() { this.setState({ mostrarAjaxLoader: true }); }
     ocultarAjaxLoader() { this.setState({ mostrarAjaxLoader: false }); }
 
+    
     async handleEmailChanged() {
-        if (this.validarCampo({ nome: 'url' }) !== '') return;
+        if (this.validarCampo({ nome: 'cnpj' }) !== '') return;
         this.mostrarAjaxLoader();
         try {
-            const response = await fetch('http://localhost:8080/site?url=' + this.state.url);
+            const response = await fetch('http://localhost:8080/hotel?cnpj=' + this.state.cnpj);
             var contentType = response.headers.get("content-type");
             if (contentType && contentType.includes("application/json")) {
-                const siteJson = await response.json();
+                const hotelJson = await response.json();
                 this.setState({
-                    estado: CadastroSite.siteExistente(),
-                    siteEncontrado: siteJson
+                    estado: CadastroHotel.hotelExistente(),
+                    hotelEncontrado: hotelJson
                 });
-                this.mostrarAviso('URL já cadastrado! Informe sua senha para cadastrar o seu site ');
+                this.mostrarAviso('CNPJ já cadastrado! Informe sua senha para cadastrar o seu hotel ');
             } else {
-                this.setState({ estado: CadastroSite.siteInexistente() });
-                this.mostrarInfo('URL ainda não cadastrado! Informe uma nova senha e demais dados para cadastro');
+                this.setState({ estado: CadastroHotel.hotelInexistente() });
+                this.mostrarInfo('CNPJ ainda não cadastrado! Informe uma nova senha e demais dados para cadastro');
             }
         } catch (e) {
             this.mostrarErro('Ocorreu um problema!');
@@ -206,17 +206,17 @@ class CadastroSiteForm extends React.Component {
 
     handleSenhaChanged() {
         if (!this.state.estado.eventoSenhaDesabilitado) {
-            if (this.state.senha === this.state.siteEncontrado.senha) {
+            if (this.state.senha === this.state.hotelEncontrado.senha) {
                 this.setState({
-                    nome: this.state.siteEncontrado.nome,
-                    telefone: this.state.siteEncontrado.telefone,
+                    nome: this.state.hotelEncontrado.nome,
+                    cidade: this.state.hotelEncontrado.cidade,
                 });
-                this.setState({ estado: CadastroSite.siteExistenteSenhaCorreta() });
+                this.setState({ estado: CadastroHotel.hotelExistenteSenhaCorreta() });
                 this.mostrarSucesso('Senha correta!');
 
 
             } else {
-                this.setState({ estado: CadastroSite.siteExistenteSenhaIncorreta() });
+                this.setState({ estado: CadastroHotel.hotelExistenteSenhaIncorreta() });
                 this.mostrarErro('Senha incorreta! Informe novamente!');
             }
         }
@@ -227,11 +227,11 @@ class CadastroSiteForm extends React.Component {
             this.mostrarErro('Atenção! Alguns campos não foram corretamente preenchidos!');
             return;
         }
-        if (this.state.siteEncontrado === null) {
-            this.setState({ estado: CadastroSite.confirmarCadastroSiteInexistente() });
+        if (this.state.hotelEncontrado === null) {
+            this.setState({ estado: CadastroHotel.confirmarCadastroHotelInexistente() });
             this.mostrarInfo('Verifique os dados e repita sua nova senha.');
         } else {
-            this.setState({ estado: CadastroSite.confirmarCadastroSiteExistente() });
+            this.setState({ estado: CadastroHotel.confirmarCadastroHotelExistente() });
             this.mostrarInfo('Verifique os seus dados');
         }
     }
@@ -245,29 +245,29 @@ class CadastroSiteForm extends React.Component {
         try {
             const novoCadastro = {
                 nome: this.state.nome,
-                telefone: this.state.telefone,
+                cidade: this.state.cidade,
                 cadastrante: {
                     id: null,
                 }
             };
-            if (this.state.siteEncontrado === null) {
-                const novoSite = {
+            if (this.state.hotelEncontrado === null) {
+                const novoHotel = {
                     nome: this.state.nome,
                     senha: this.state.senha,
-                    url: this.state.url,
-                    telefone: this.state.telefone,
+                    cnpj: this.state.cnpj,
+                    cidade: this.state.cidade,
                 };
-                const response = await fetch('http://localhost:8080/site', {
+                const response = await fetch('http://localhost:8080/hotel', {
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     method: 'POST',
-                    body: JSON.stringify(novoSite),
+                    body: JSON.stringify(novoHotel),
                 })
-                const siteGravado = await response.json();
-                novoCadastro.cadastrante.id = siteGravado.id;
+                const hotelGravado = await response.json();
+                novoCadastro.cadastrante.id = hotelGravado.id;
             } else {
-                novoCadastro.cadastrante.id = this.state.siteEncontrado.id;
+                novoCadastro.cadastrante.id = this.state.hotelEncontrado.id;
             }
             await fetch('http://localhost:8080/cadastro', {
                 headers: {
@@ -280,14 +280,14 @@ class CadastroSiteForm extends React.Component {
 
             this.mostrarSucesso(`Obrigado pela preferência, ${this.state.nome}!`);
             this.setState({
-                url: '',
+                cnpj: '',
                 senha: '',
                 nome: '',
-                telefone: '',
+                cidade: '',
                 confirmarSenha: '',
-                siteEncontrado: null,
+                hotelEncontrado: null,
             });
-            this.setState({ estado: CadastroSite.inicio() });
+            this.setState({ estado: CadastroHotel.inicio() });
         } catch (e) {
             this.mostrarErro('Ocorreu um problema!');
             console.log(e);
@@ -302,25 +302,25 @@ class CadastroSiteForm extends React.Component {
         }
 
 
-        if (nome === 'url') {
-            //fazer uma verificação valida para url
+        if (nome === 'cnpj') {
+            //fazer uma verificação valida para cnpj
             if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(valor)) {
-                return 'URL está em formato incorreto';
+                return 'CNPJ está em formato incorreto';
             }
         } else if (nome === 'senha') {
             if (valor.length === 0) {
                 return 'Senha não pode ser vazia';
-            } else if (this.state.siteEncontrado === null) {
+            } else if (this.state.hotelEncontrado === null) {
                 if (valor.length < 6) {
                     return 'Senha muito curta';
                 }
             }
-        } else if (nome === 'nome' || nome === 'telefone') {
+        } else if (nome === 'nome' || nome === 'cidade') {
             if (valor === '') {
                 return 'Não pode ser vazio';
             }
         } else if (nome === 'confirmarSenha') {
-            if (this.state.siteEncontrado === null && this.state.estado.botaoConfirmarCadastroVisivel) {
+            if (this.state.hotelEncontrado === null && this.state.estado.botaoConfirmarCadastroVisivel) {
                 const senha = this.state.senha;
                 if (valor !== senha) {
                     return 'Confirmação da senha não confere';
@@ -347,4 +347,4 @@ class CadastroSiteForm extends React.Component {
 
 }
 
-export default CadastroSiteForm;
+export default CadastroHotelForm;

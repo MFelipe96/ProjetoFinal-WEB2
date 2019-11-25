@@ -11,7 +11,7 @@ const Cadastro = () => (
             <h3>O que você deseja cadastrar ?</h3>
             <p>
                 <Link to='cadastroSiteForm' className="btn btn-success btn-space">Site</Link>
-                <Link to='verPalpites' className="btn btn-success btn-space">Hotel</Link>
+                <Link to='cadastroHotelForm' className="btn btn-success btn-space">Hotel</Link>
             </p>
         </div>
     </div>

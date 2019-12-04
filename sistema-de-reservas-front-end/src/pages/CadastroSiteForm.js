@@ -136,7 +136,6 @@ class CadastroSiteForm extends React.Component {
                             </div>
                         </div>
 
-
                         <div className="form-group">
                             <div className="col-sm-12">
                                 <a className="btn btn-default"

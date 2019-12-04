@@ -13,8 +13,10 @@ import com.mongodb.client.model.Filters;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.mvel2.util.ArrayTools;
 
 import br.ufscar.dc.web2.reservas.beans.Hotel;
+import br.ufscar.dc.web2.reservas.beans.Promocao;
 
 @ApplicationScoped
 public class HotelDAO {
@@ -77,5 +79,22 @@ public class HotelDAO {
   
         return lista;
     }
+
+    public List<String> listarCidadesComPromocao(List<String> listaPromocao){
+        List<String> listaCidades = new ArrayList<>();
+        MongoCursor<Document> cursor = getCollection().find(Filters.in("cnpj",listaPromocao)).iterator();
+        while(cursor.hasNext()){
+            Document Document = cursor.next();
+            String cidade = Document.getString(MongoDBSchema.HOTEL_CAMPOS.cidade.name());
+            if(!listaCidades.contains(cidade)){
+                listaCidades.add(cidade);
+            }
+        }
+
+
+        return listaCidades;
+    }
+
+
     }
 

@@ -52,6 +52,46 @@ public class PromocaoDAO{
         return null;
     }
 
+    public List<Promocao> listarPromocao(){
+        List<Promocao> listaPromocao = new ArrayList<>();
+        MongoCursor<Document> cursor = getCollection().find().iterator();
+        while(cursor.hasNext()){
+            Document Document = cursor.next();
+            Promocao p = new Promocao();
+            p.setId(Document.getObjectId("_id").toString());
+            p.setUrl(Document.getString(MongoDBSchema.PROMOCAO_CAMPOS.url.name()));
+            p.setCnpj(Document.getString(MongoDBSchema.PROMOCAO_CAMPOS.cnpj.name()));
+            p.setInicio(Document.getDate(MongoDBSchema.PROMOCAO_CAMPOS.inicio.name()));
+            p.setFim(Document.getDate(MongoDBSchema.PROMOCAO_CAMPOS.fim.name()));
+            p.setPreco(Document.getDouble(MongoDBSchema.PROMOCAO_CAMPOS.preco.name()));
+            listaPromocao.add(p);
+        }
+        
+        return listaPromocao;
+    }
+
+    public List<String> listarPromocaoCnpj(){
+        List<String> listaPromocao = new ArrayList<>();
+        MongoCursor<Document> cursor = getCollection().find().iterator();
+        while(cursor.hasNext()){
+            Document Document = cursor.next();
+            String p;
+            p = Document.getString(MongoDBSchema.PROMOCAO_CAMPOS.cnpj.name());
+           
+            listaPromocao.add(p);
+        }
+        return listaPromocao;
+    }
+
+
+    public List<String> listarCidades(){
+        List<String> listaCidade = new ArrayList<>();
+        List<String> listaPromocao;
+         listaPromocao = listarPromocaoCnpj();
+         listaCidade = hotelDAO.listarCidadesComPromocao(listaPromocao);
+        return listaCidade;
+    }
+
     public List<Promocao> listarPromocaoPorCidade(String cidade){
         List<String> listaHotel = hotelDAO.buscarHotelPelaCidade(cidade);
         MongoCursor<Document> cursor = getCollection().find(Filters.in("cnpj",listaHotel)).iterator();
@@ -76,6 +116,28 @@ public class PromocaoDAO{
         
         List<Promocao> listaPromocao = new ArrayList<>();
         try(MongoCursor<Document> cursor = getCollection().find(Filters.eq("cnpj", cnpj)).iterator()){
+        while(cursor.hasNext()){
+            Document Document = cursor.next();
+            Promocao p = new Promocao();
+            p.setId(Document.getObjectId("_id").toString());
+            p.setUrl(Document.getString(MongoDBSchema.PROMOCAO_CAMPOS.url.name()));
+            p.setCnpj(Document.getString(MongoDBSchema.PROMOCAO_CAMPOS.cnpj.name()));
+            p.setInicio(Document.getDate(MongoDBSchema.PROMOCAO_CAMPOS.inicio.name()));
+            p.setFim(Document.getDate(MongoDBSchema.PROMOCAO_CAMPOS.fim.name()));
+            p.setPreco(Document.getDouble(MongoDBSchema.PROMOCAO_CAMPOS.preco.name()));
+            listaPromocao.add(p);
+        }
+    }
+    
+        return listaPromocao;
+    }
+
+
+    public List<Promocao> listarPromocaoPorSite(String url){
+
+        
+        List<Promocao> listaPromocao = new ArrayList<>();
+        try(MongoCursor<Document> cursor = getCollection().find(Filters.eq("url", url)).iterator()){
         while(cursor.hasNext()){
             Document Document = cursor.next();
             Promocao p = new Promocao();

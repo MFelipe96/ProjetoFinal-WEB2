@@ -2,6 +2,7 @@ package br.ufscar.dc.web2.reservas.servicos;
 
 import java.util.List;
 
+import javax.annotation.Generated;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -48,6 +49,19 @@ public class ServicosPromocao{
     @Produces(MediaType.APPLICATION_JSON)
     public Promocao getPromocao(@QueryParam("_id") String _id){
         return PromocaoDAO.buscarPromocao(_id);
+    }
+    @GET
+    @Path("/cidades")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<String> getCidades(){
+        return PromocaoDAO.listarCidades();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/promocoes")
+    public List<Promocao> getPromocoes(){
+        return PromocaoDAO.listarPromocao();
     }
 
 }

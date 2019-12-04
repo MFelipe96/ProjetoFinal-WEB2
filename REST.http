@@ -102,3 +102,9 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:8080/promocao/cidade?cidade=São Carlos
+
+###
+
+GET http://localhost:8080/promocao/cidades
+###
+GET http://localhost:8080/promocao/promocoes

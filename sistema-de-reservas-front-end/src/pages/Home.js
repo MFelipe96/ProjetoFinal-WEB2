@@ -14,10 +14,12 @@ class Home extends React.Component {
     constructor() {
         super();
         this.state = {
-            rangeOptions:[{label:"Esta semana",value:1},{label:"Este mês",value:2},{label:"Este trimestre",value:3},{label:"Este semestre",value:4},{label:"Este ano",value:5},{label:"Definir intervalo",value:6}],
+            rangeOptions:[{label:"Todos",value:3},{label:"Esta semana",value:1},{label:"Este mês",value:2},{label:"Este ano",value:4},{label:"Definir intervalo",value:5}],
             cidades: null,
             promocoes: null,
-            cidade: null
+            cidade: null,
+            promoExibe: null,
+            filtro: 3
         };
     
     }
@@ -39,6 +41,7 @@ class Home extends React.Component {
         if (contentTypePromocoes && contentTypePromocoes.includes("application/json")) {
             const promocoesJson = await responsePromocoes.json();
             this.setState({ promocoes: promocoesJson });
+            this.setState({promoExibe: promocoesJson})
             console.log(promocoesJson)
         }
     }
@@ -59,53 +62,88 @@ class Home extends React.Component {
         if (contentTypePromocoes && contentTypePromocoes.includes("application/json")) {
             const promocoesJson =await responsePromocoes.json();
             this.setState({ promocoes: promocoesJson });
+            this.setState({promoExibe: promocoesJson})
+            this.onRangeChange({value:this.state.filtro})
             console.log(this.state.promocoes)
         }
     }
 
     
-    onRangeChange(e){
+    async onRangeChange(e){
         var cur = new Date()
+        this.setState({filtro:e.value})
         switch(e.value){
-            case 6:
+            case 5:
                 console.log("Hewo")
                 break
             case 2:
                 var a =new Date(cur.getFullYear(),cur.getMonth())
                 var b = new Date(cur.getFullYear(),cur.getMonth()+1)
                 b.setSeconds(-1)
-                console.log(this.state.promocoes.filter(function(obj){
+                var n = this.state.promocoes.filter(function(obj){
                     var d = obj.inicio
                     var hora1 = d.split(/[-:A-Z]/)
-                    var data = new Date(hora1[0],hora1[1],hora1[2],hora1[3],hora1[4],hora1[5])
+                    var data = new Date(hora1[0],hora1[1]-1,hora1[2],hora1[3],hora1[4],hora1[5])
                     return(data >= a && data <= b)
                 })
-                )
+                this.setState({promoExibe:n})
+                break
+            case 4:
+                var a = new Date(cur.getFullYear(),0)
+                var b = new Date(cur.getFullYear()+1,0)
+                b.setSeconds(-1)
+                console.log("a: "+a+" b: "+b)
+                var n = this.state.promocoes.filter(function(obj){
+                    var d = obj.inicio
+                    var hora1 = d.split(/[-:A-Z]/)
+                    var data = new Date(hora1[0],hora1[1]-1,hora1[2],hora1[3],hora1[4],hora1[5])
+                    return(data >= a && data <= b)
+                })
+                this.setState({promoExibe:n})
+                break
+            case 1:
+                var b = new Date(cur.getFullYear(),cur.getMonth(),(cur.getDay()-cur.getDay()%7)+7)
+                var a = new Date(cur.getFullYear(),cur.getMonth(),(cur.getDay()-cur.getDay()%7)+1)
+                console.log("a: "+a+" b: "+b)
+                var n = this.state.promocoes.filter(function(obj){
+                    var d = obj.inicio
+                    var hora1 = d.split(/[-:A-Z]/)
+                    var data = new Date(hora1[0],hora1[1]-1,hora1[2],hora1[3],hora1[4],hora1[5])
+                    return(data >= a && data <= b)
+                })
+                this.setState({promoExibe:n})
+                break
+            case 3:
+                        this.setState({ promoExibe: this.state.promocoes});
+                    
+                break
+
+
         }
     }
     tabelaCorpo(){
-        if(this.state.promocoes){
+        if(this.state.promoExibe){
             var tabela = []
             
             //console.log(d)
-        for(var i = 0;i<this.state.promocoes.length;i++){
-            var hora1 = this.state.promocoes[i].inicio.split(/[-:A-Z]/)
-            var d1 = new Date(hora1[0],hora1[1],hora1[2],hora1[3],hora1[4],hora1[5])
-            var hora2 = this.state.promocoes[i].fim.split(/[-:A-Z]/)
-            var d2 = new Date(hora2[0],hora2[1],hora2[2],hora2[3],hora2[4],hora2[5])
+        for(var i = 0;i<this.state.promoExibe.length;i++){
+            var hora1 = this.state.promoExibe[i].inicio.split(/[-:A-Z]/)
+            var d1 = new Date(hora1[0],hora1[1]-1,hora1[2],hora1[3],hora1[4],hora1[5])
+            var hora2 = this.state.promoExibe[i].fim.split(/[-:A-Z]/)
+            var d2 = new Date(hora2[0],hora2[1]-1,hora2[2],hora2[3],hora2[4],hora2[5])
             tabela.push(<Table.Row key={i}>
-                <Table.Cell>{this.state.promocoes[i].cnpj}</Table.Cell>
-                <Table.Cell>{this.state.promocoes[i].url}</Table.Cell>
+                <Table.Cell>{this.state.promoExibe[i].cnpj}</Table.Cell>
+                <Table.Cell>{this.state.promoExibe[i].url}</Table.Cell>
                 <Table.Cell>{d1.toLocaleDateString('pt-BR',{year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'})}</Table.Cell>
                 <Table.Cell>{d2.toLocaleDateString('pt-BR',{year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'})}</Table.Cell>
-                <Table.Cell>{this.state.promocoes[i].preco}</Table.Cell>
+                <Table.Cell>{this.state.promoExibe[i].preco}</Table.Cell>
                 </Table.Row>)
         }
         return(tabela)
     }
     }
     render() {
-       let tabela = (<Table celled >
+       let tabela = (<Table celled color="teal" inverted>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>hotel</Table.HeaderCell>

@@ -14,8 +14,8 @@ class CadastroHotel {
 
     static hotelExistente() {
         return {
-            campoSenhaDesabilitado: false,
-            eventoSenhaDesabilitado: false,
+            campoSenhaDesabilitado: true,
+            eventoSenhaDesabilitado: true,
             camposDadosPessoaisDesabilitados: true,
             camposDadosCadastroDesabilitados: true,
             camposDadosCadastroDestaque: false,

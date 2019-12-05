@@ -14,8 +14,8 @@ class CadastroSite {
 
     static siteExistente() {
         return {
-            campoSenhaDesabilitado: false,
-            eventoSenhaDesabilitado: false,
+            campoSenhaDesabilitado: true,
+            eventoSenhaDesabilitado: true,
             camposDadosPessoaisDesabilitados: true,
             camposDadosCadastroDesabilitados: true,
             camposDadosCadastroDestaque: false,
@@ -75,7 +75,7 @@ class CadastroSite {
             camposDadosCadastroDestaque: true,
             botaoEnvioDesabilitado: false,
             campoConfirmacaoSenhaVisivel: false,
-            botaoConfirmarCadastroVisivel: true,
+            botaoConfirmarCadastroVisivel: false,
         };
     }
 

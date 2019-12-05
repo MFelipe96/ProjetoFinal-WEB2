@@ -48,7 +48,7 @@ class CadastroSiteForm extends React.Component {
                                             label="URL"
                                             value={this.state.url}
                                             onChange={(event) => this.handleUserInput(event)}
-                                            onBlur={() => this.handleEmailChanged()}>
+                                            onBlur={() => this.handleUrlChanged()}>
                                         </input>
                                         <span className="text text-danger">{this.state.mensagensValidacao['url']}</span>
                                     </div>
@@ -179,7 +179,7 @@ class CadastroSiteForm extends React.Component {
     mostrarAjaxLoader() { this.setState({ mostrarAjaxLoader: true }); }
     ocultarAjaxLoader() { this.setState({ mostrarAjaxLoader: false }); }
 
-    async handleEmailChanged() {
+    async handleUrlChanged() {
         if (this.validarCampo({ nome: 'url' }) !== '') return;
         this.mostrarAjaxLoader();
         try {
@@ -191,9 +191,9 @@ class CadastroSiteForm extends React.Component {
                     estado: CadastroSite.siteExistente(),
                     siteEncontrado: siteJson
                 });
-                this.mostrarAviso('URL já cadastrado! Informe sua senha para cadastrar o seu site ');
+                this.mostrarAviso('URL já cadastrado! Informe uma nova url para cadastrar o seu site ');
             } else {
-                this.setState({ estado: CadastroSite.siteInexistente() });
+                this.setState({ estado: CadastroSite.siteInexistente(), siteEncontrado: null });
                 this.mostrarInfo('URL ainda não cadastrado! Informe uma nova senha e demais dados para cadastro');
             }
         } catch (e) {
@@ -242,12 +242,11 @@ class CadastroSiteForm extends React.Component {
         }
         this.mostrarAjaxLoader();
         try {
-            const novoCadastro = {
+            const novoSiteDefault = {
                 nome: this.state.nome,
+                senha: this.state.senha,
+                url: this.state.url,
                 telefone: this.state.telefone,
-                cadastrante: {
-                    id: null,
-                }
             };
             if (this.state.siteEncontrado === null) {
                 const novoSite = {
@@ -262,21 +261,8 @@ class CadastroSiteForm extends React.Component {
                     },
                     method: 'POST',
                     body: JSON.stringify(novoSite),
-                })
-                const siteGravado = await response.json();
-                novoCadastro.cadastrante.id = siteGravado.id;
-            } else {
-                novoCadastro.cadastrante.id = this.state.siteEncontrado.id;
+                });
             }
-            await fetch('http://localhost:8080/cadastro', {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(novoCadastro),
-            });
-
-
             this.mostrarSucesso(`Obrigado pela preferência, ${this.state.nome}!`);
             this.setState({
                 url: '',

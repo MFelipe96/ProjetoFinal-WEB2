@@ -192,9 +192,9 @@ class CadastroHotelForm extends React.Component {
                     estado: CadastroHotel.hotelExistente(),
                     hotelEncontrado: hotelJson
                 });
-                this.mostrarAviso('CNPJ já cadastrado! Informe sua senha para cadastrar o seu hotel ');
+                this.mostrarAviso('CNPJ já cadastrado! Informe um novo cnpj para cadastrar o seu hotel ');
             } else {
-                this.setState({ estado: CadastroHotel.hotelInexistente() });
+                this.setState({ estado: CadastroHotel.hotelInexistente(), hotelEncontrado: null });
                 this.mostrarInfo('CNPJ ainda não cadastrado! Informe uma nova senha e demais dados para cadastro');
             }
         } catch (e) {
@@ -264,20 +264,7 @@ class CadastroHotelForm extends React.Component {
                     method: 'POST',
                     body: JSON.stringify(novoHotel),
                 })
-                const hotelGravado = await response.json();
-                novoCadastro.cadastrante.id = hotelGravado.id;
-            } else {
-                novoCadastro.cadastrante.id = this.state.hotelEncontrado.id;
-            }
-            await fetch('http://localhost:8080/cadastro', {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(novoCadastro),
-            });
-
-
+            } 
             this.mostrarSucesso(`Obrigado pela preferência, ${this.state.nome}!`);
             this.setState({
                 cnpj: '',

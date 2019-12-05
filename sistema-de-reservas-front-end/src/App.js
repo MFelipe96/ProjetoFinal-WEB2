@@ -9,6 +9,7 @@ import  Login from './pages/Login';
 import LoginForm from './pages/LoginForm';
 import ListaPromocaoHotel from './pages/ListaPromocaoHotel';
 import ListaPromocaoSite from './pages/ListaPromocaoSite';
+import CadastroPromocaoForm from './pages/CadastroPromocaoForm';
 function App() {
   
     return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/login" component={Login} />
               <Route path="/hotel" component={ListaPromocaoHotel}/>
               <Route path="/site" component={ListaPromocaoSite}/>
+              <Route path="/cadastroPromocao" component={CadastroPromocaoForm}/>
            </div>
          </div>
        </div>

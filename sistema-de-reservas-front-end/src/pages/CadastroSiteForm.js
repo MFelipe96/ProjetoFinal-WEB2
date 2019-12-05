@@ -288,8 +288,7 @@ class CadastroSiteForm extends React.Component {
 
 
         if (nome === 'url') {
-            //fazer uma verificação valida para url
-            if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(valor)) {
+            if (!/^((ftp|http|https):\/\/)?www\.([A-z]+)\.([A-z]{2,})/.test(valor)) {
                 return 'URL está em formato incorreto';
             }
         } else if (nome === 'senha') {

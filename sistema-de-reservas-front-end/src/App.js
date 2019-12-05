@@ -7,6 +7,8 @@ import CadastroSiteForm from './pages/CadastroSiteForm';
 import CadastroHotelForm from './pages/CadastroHotelForm';
 import  Login from './pages/Login';
 import LoginForm from './pages/LoginForm';
+import ListaPromocaoHotel from './pages/ListaPromocaoHotel';
+import ListaPromocaoSite from './pages/ListaPromocaoSite';
 function App() {
   
     return (
@@ -21,6 +23,8 @@ function App() {
               <Route path="/cadastroHotelForm" component={CadastroHotelForm}/>
               <Route path="/cadastro" component={Cadastro} />
               <Route path="/login" component={Login} />
+              <Route path="/hotel" component={ListaPromocaoHotel}/>
+              <Route path="/site" component={ListaPromocaoSite}/>
            </div>
          </div>
        </div>

@@ -12,6 +12,18 @@ html,body{
   margin: 5px;
 }
 
+.picker{
+  display: flex;
+  flex-direction: row;
+}
+
+.item{
+  margin-right: 10em;
+}
+
+.dateButton{
+  padding:2em;
+}
 
 #holder{
   min-height: 100%;

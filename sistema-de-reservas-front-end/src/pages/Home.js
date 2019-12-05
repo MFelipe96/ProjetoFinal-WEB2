@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 
 
 import { DataTable } from 'primereact/components/datatable/DataTable';
@@ -7,7 +7,9 @@ import { InputText } from 'primereact/components/inputtext/InputText';
 import { Dropdown } from 'primereact/dropdown';
 import Select from 'react-select';
 import {DataScroller} from 'primereact/datascroller';
-import { Icon, Label, Menu, Table, TableBody } from 'semantic-ui-react'
+import { Icon, Label, Menu, Table, TableBody,Button } from 'semantic-ui-react'
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import 'semantic-ui-css/semantic.min.css';
 class Home extends React.Component {
 
@@ -19,7 +21,10 @@ class Home extends React.Component {
             promocoes: null,
             cidade: null,
             promoExibe: null,
-            filtro: 3
+            filtro: 3,
+            datePickerEnable: false,
+            startDate: new Date(),
+            endDate: new Date()
         };
     
     }
@@ -74,9 +79,10 @@ class Home extends React.Component {
         this.setState({filtro:e.value})
         switch(e.value){
             case 5:
-                console.log("Hewo")
+                this.setState({datePickerEnable:true})
                 break
             case 2:
+                this.setState({datePickerEnable:false})
                 var a =new Date(cur.getFullYear(),cur.getMonth())
                 var b = new Date(cur.getFullYear(),cur.getMonth()+1)
                 b.setSeconds(-1)
@@ -89,6 +95,7 @@ class Home extends React.Component {
                 this.setState({promoExibe:n})
                 break
             case 4:
+                this.setState({datePickerEnable:false})
                 var a = new Date(cur.getFullYear(),0)
                 var b = new Date(cur.getFullYear()+1,0)
                 b.setSeconds(-1)
@@ -102,6 +109,7 @@ class Home extends React.Component {
                 this.setState({promoExibe:n})
                 break
             case 1:
+                this.setState({datePickerEnable:false})
                 var b = new Date(cur.getFullYear(),cur.getMonth(),(cur.getDay()-cur.getDay()%7)+7)
                 var a = new Date(cur.getFullYear(),cur.getMonth(),(cur.getDay()-cur.getDay()%7)+1)
                 console.log("a: "+a+" b: "+b)
@@ -114,7 +122,8 @@ class Home extends React.Component {
                 this.setState({promoExibe:n})
                 break
             case 3:
-                        this.setState({ promoExibe: this.state.promocoes});
+                this.setState({datePickerEnable:false})
+                this.setState({ promoExibe: this.state.promocoes});
                     
                 break
 
@@ -125,7 +134,6 @@ class Home extends React.Component {
         if(this.state.promoExibe){
             var tabela = []
             
-            //console.log(d)
         for(var i = 0;i<this.state.promoExibe.length;i++){
             var hora1 = this.state.promoExibe[i].inicio.split(/[-:A-Z]/)
             var d1 = new Date(hora1[0],hora1[1]-1,hora1[2],hora1[3],hora1[4],hora1[5])
@@ -141,6 +149,35 @@ class Home extends React.Component {
         }
         return(tabela)
     }
+    }
+    onButtonPress(e){
+        this.setState({datePickerEnable:false})
+        var a = this.state.startDate
+        var b = this.state.endDate
+        var n = this.state.promocoes.filter(function(obj){
+            var d = obj.inicio
+            var hora1 = d.split(/[-:A-Z]/)
+            var data = new Date(hora1[0],hora1[1]-1,hora1[2],hora1[3],hora1[4],hora1[5])
+            return(data >= a && data <= b)
+        })
+        this.setState({promoExibe:n})
+    }
+    showDatePicker(){
+
+        if(this.state.datePickerEnable){
+  return (
+      <div>
+      <div className='picker'>
+    <div className='item'><DatePicker selected={this.state.startDate} onChange={date => this.setState({startDate:date})} showTimeSelect inline/></div>
+    <div className='item'> <DatePicker selected={this.state.endDate}  onChange={date => this.setState({endDate:date})} showTimeSelect inline/> </div>
+    
+    </div>
+    <div className='dateButton'>
+    <Button onClick={(e) => this.onButtonPress(e)}>Pronto!</Button> 
+    </div>
+    </div>
+  );
+        }
     }
     render() {
        let tabela = (<Table celled color="teal" inverted>
@@ -164,7 +201,9 @@ class Home extends React.Component {
                
             <h1>Buscar por cidade</h1>
             <Select options={this.state.rangeOptions} onChange={(e) => this.onRangeChange(e)}/>
+            {this.showDatePicker()}
             <Select options={this.state.cidades} onChange={(e) => this.onCidadeChange(e)}/>
+            
             {tabela}      
             </div>
             
